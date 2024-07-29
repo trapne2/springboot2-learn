@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springbootmybatisxml.mapper.BsUserMapper" >
+    <resultMap id="BaseResultMap" type="com.example.springbootmybatisxml.model.BsUser" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="username" property="userName" jdbcType="VARCHAR" />
+        <result column="password" property="passWord" jdbcType="VARCHAR" />
+        <result column="sex" property="userSex" javaType="com.example.springbootmybatisxml.enums.BsUserSexEnum"/>
+        <result column="email" property="email" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, username, password, email, sex
+    </sql>
+
+    <sql id="Base_Where_List">
+        <if test="userName != null  and userName != ''">
+            and username = #{userName}
+        </if>
+        <if test="userSex != null and userSex != ''">
+            and sex = #{userSex}
+        </if>
+    </sql>
+
+    <select id="getAll" resultMap="BaseResultMap"  >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bs_user
+    </select>
+
+    <select id="getList" resultMap="BaseResultMap" parameterType="com.example.springbootmybatisxml.param.BsUserParam">
+        select
+        <include refid="Base_Column_List" />
+        from bs_user
+        where 1=1
+        <include refid="Base_Where_List" />
+        order by id desc
+        limit #{beginLine} , #{pageSize}
+    </select>
+
+    <select id="getCount" resultType="Integer" parameterType="com.example.springbootmybatisxml.param.BsUserParam">
+        select
+        count(1)
+        from bs_user
+        where 1=1
+        <include refid="Base_Where_List" />
+    </select>
+
+
+</mapper>
